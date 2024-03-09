@@ -16,21 +16,37 @@ function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflec
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); } // Importa la clase Animal desde el archivo Animal.js
+// Obtiene el elemento de audio HTML con el ID "player"
+var sonidoPlayer = document.getElementById("player");
+
+// Imprime en la consola el elemento de audio obtenido
+console.log("sonido en la clase aguila:", sonidoPlayer);
+
+// Definición de la clase Lobo que extiende la clase Animal
 var Lobo = /*#__PURE__*/function (_Animal) {
   _inherits(Lobo, _Animal);
   var _super = _createSuper(Lobo);
+  // Constructor de la clase Lobo
   function Lobo(nombre, edad, img, comentarios, sonido) {
     _classCallCheck(this, Lobo);
+    // Llama al constructor de la clase Animal utilizando super()
     return _super.call(this, nombre, edad, img, comentarios, sonido);
   }
+
+  // Método para que el lobo "Aulle"
   _createClass(Lobo, [{
     key: "Aullar",
     value: function Aullar(sonido) {
-      return "assets/sounds/".concat(sonido);
+      // Establece la fuente del sonido del reproductor de audio
+      // utilizando la propiedad _sonido de la instancia de Lobo
+      sonidoPlayer.src = "assets/sounds/".concat(this._sonido);
+
+      // Reproduce el sonido utilizando el reproductor de audio
+      sonidoPlayer.play();
     }
   }]);
   return Lobo;
-}(_Animal2["default"]);
+}(_Animal2["default"]); // Exporta la clase Lobo para que esté disponible para su uso en otros archivos
 var _default = Lobo;
 exports["default"] = _default;
