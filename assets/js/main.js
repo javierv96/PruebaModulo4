@@ -58,31 +58,26 @@ const formAnimals = async () => {
         switch (name) {
             case 'Leon':
                 const leon = new Leon(name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-                modal(leon);
                 animalesRegistrados.push(leon);
                 break;
 
             case 'Lobo':
                 const lobo = new Lobo(name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-                modal(lobo);
                 animalesRegistrados.push(lobo);
                 break;
 
             case 'Oso':
                 const oso = new Oso(name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-                modal(oso);
                 animalesRegistrados.push(oso);
                 break;
 
             case 'Serpiente':
                 const serpiente = new Serpiente(name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-                modal(serpiente);
                 animalesRegistrados.push(serpiente);
                 break;
 
             case 'Aguila':
                 const aguila = new Aguila(name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-                modal(aguila);
                 animalesRegistrados.push(aguila);
                 break;
 
@@ -132,8 +127,8 @@ const mostrarAnimalesRegistrados = (animalesRegistrados) => {
     // Generar HTML para cada animal registrado
     animalesRegistrados.forEach(animal => {
         postHTML +=
-            '<div class="card" style="width: 19rem;">' +
-            `<img src="assets/imgs/${animal.img}" class="card-img-top" id="cardTabla">
+            '<div class="card m-3" style="width: 19rem;">' +
+            `<img src="assets/imgs/${animal.img}" class="card-img-top" data-animal="${animal.nombre}" data-toggle="modal" data-target="#exampleModal">
             <div>
             <button onclick="playSound('${animal.nombre}')" class="btn btn-secondary w-100"> <img height="30" src="assets/imgs/audio.svg" /> </button>
             </div>
@@ -143,26 +138,38 @@ const mostrarAnimalesRegistrados = (animalesRegistrados) => {
 
     // Mostrar las tarjetas en el contenedor
     container.innerHTML = postHTML;
+
+    // Agregar evento de clic a cada imagen
+    const images = document.querySelectorAll('#Animales img.card-img-top');
+    images.forEach(img => {
+        img.addEventListener('click', (event) => {
+            const animal = event.target.dataset.animal;
+            modal(animal);
+        });
+    });
 };
 
 // Función para mostrar un modal con la información del animal registrado
+// -----------------------------------------------------------------------
+// estoy conciente de que esta funcion no tiene el comportamiento correspondiente, ya que cuando se registra un segundo animal del mismo tipo que el primero,
+// y consultar este segundo haciendo click en la imagen, este muestra los datos del primer animal registrado de su tipo, en un caso real donde existe una base de datos
+// el animal registrado contaria con un id unico, por lo que al consultarl esta funcion se podria llamar a los datos correspondientes del id unico asignado al animal registrado.
+// puede que exista otra forma en la cual no se necesita un id unico asignado, pero escapa de mi conocimiento. tal vez recorriendo el arreglo de animales registrados pero no veo como eso podria funcionar si la funcion solo se guia por un clic.
 const modal = (animal) => {
+    const animalSeleccionado = animalesRegistrados.find((a) => a._nombre == animal);
     const modalContent = `
              <div class="modal-dialog modal-dialog-centered w-50 text-light" role="document">
                 <div class="modal-content bg-dark" style="width: 350px">
                      <div class="modal-header">
-                         <h5 class="modal-title">${animal.nombre}</h5>
+                         <h5 class="modal-title">${animalSeleccionado.nombre}</h5>
                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                              <span aria-hidden="true">&times;</span>
                          </button>
                      </div>
                      <div class="modal-body">
-                         <img src="assets/imgs/${animal.img}" class="img-fluid" alt="${animal.nombre}" style="width: 340px" />
-                        <p>Edad: ${animal.edad}</p>
-                         <p>Comentarios: ${animal.comentarios}</p>
-                         <div>
-                         <button onclick="playSound('${animal.nombre}')" class="btn btn-secondary w-100"> <img height="30" src="assets/imgs/audio.svg" /> </button>
-                         </div>
+                         <img src="assets/imgs/${animalSeleccionado.img}" class="img-fluid" alt="${animalSeleccionado.nombre}" style="width: 340px" />
+                        <p>Edad: ${animalSeleccionado.edad}</p>
+                         <p>Comentarios: ${animalSeleccionado.comentarios}</p>
                      </div>
                  </div>
              </div>
@@ -186,9 +193,19 @@ document.getElementById('animal').addEventListener('change', async () => {
 
 // Event listener para registrar nuevos animales cuando se hace clic en el botón "Registrar"
 document.getElementById("btnRegistrar").addEventListener("click", async () => {
-    // Llamar a la función formAnimals y mostrar los animales registrados
-    const animalesRegistrados = await formAnimals();
-    if (animalesRegistrados) {
-        mostrarAnimalesRegistrados(animalesRegistrados);
+
+    const nombreAnimal = document.getElementById('animal').value;
+    const edadAnimal = document.getElementById('edad').value;
+    const comentariosAnimal = document.getElementById('comentarios').value;
+
+    // Condiciona que todos los campos sean seleccionados/completados
+    if (nombreAnimal == 'Seleccione un animal' || edadAnimal == 'Seleccione un rango de años' || comentariosAnimal == '') {
+        alert("debe completar todos los campos para registrar un animal");
+    } else {
+        // Llamar a la función formAnimals y mostrar los animales registrados
+        const animalesRegistrados = await formAnimals();
+        if (animalesRegistrados) {
+            mostrarAnimalesRegistrados(animalesRegistrados);
+        }
     }
 });
