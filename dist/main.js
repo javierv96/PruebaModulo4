@@ -84,48 +84,43 @@ var formAnimals = /*#__PURE__*/function () {
             return _context2.abrupt("return");
           case 14:
             _context2.t0 = name;
-            _context2.next = _context2.t0 === 'Leon' ? 17 : _context2.t0 === 'Lobo' ? 21 : _context2.t0 === 'Oso' ? 25 : _context2.t0 === 'Serpiente' ? 29 : _context2.t0 === 'Aguila' ? 33 : 37;
+            _context2.next = _context2.t0 === 'Leon' ? 17 : _context2.t0 === 'Lobo' ? 20 : _context2.t0 === 'Oso' ? 23 : _context2.t0 === 'Serpiente' ? 26 : _context2.t0 === 'Aguila' ? 29 : 32;
             break;
           case 17:
             leon = new _Leon["default"](name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-            modal(leon);
             animalesRegistrados.push(leon);
-            return _context2.abrupt("break", 39);
-          case 21:
+            return _context2.abrupt("break", 34);
+          case 20:
             lobo = new _Lobo["default"](name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-            modal(lobo);
             animalesRegistrados.push(lobo);
-            return _context2.abrupt("break", 39);
-          case 25:
+            return _context2.abrupt("break", 34);
+          case 23:
             oso = new _Oso["default"](name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-            modal(oso);
             animalesRegistrados.push(oso);
-            return _context2.abrupt("break", 39);
-          case 29:
+            return _context2.abrupt("break", 34);
+          case 26:
             serpiente = new _Serpiente["default"](name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-            modal(serpiente);
             animalesRegistrados.push(serpiente);
-            return _context2.abrupt("break", 39);
-          case 33:
+            return _context2.abrupt("break", 34);
+          case 29:
             aguila = new _Aguila["default"](name, edad, animalElegido.imagen, comentarios, animalElegido.sonido);
-            modal(aguila);
             animalesRegistrados.push(aguila);
-            return _context2.abrupt("break", 39);
-          case 37:
+            return _context2.abrupt("break", 34);
+          case 32:
             console.log('Animal no reconocido');
-            return _context2.abrupt("break", 39);
-          case 39:
+            return _context2.abrupt("break", 34);
+          case 34:
             return _context2.abrupt("return", animalesRegistrados);
-          case 42:
-            _context2.prev = 42;
+          case 37:
+            _context2.prev = 37;
             _context2.t1 = _context2["catch"](0);
             console.error('Error al obtener los datos de los animales:', _context2.t1);
-          case 45:
+          case 40:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 42]]);
+    }, _callee2, null, [[0, 37]]);
   }));
   return function formAnimals() {
     return _ref2.apply(this, arguments);
@@ -168,16 +163,33 @@ var mostrarAnimalesRegistrados = function mostrarAnimalesRegistrados(animalesReg
 
   // Generar HTML para cada animal registrado
   animalesRegistrados.forEach(function (animal) {
-    postHTML += '<div class="card" style="width: 19rem;">' + "<img src=\"assets/imgs/".concat(animal.img, "\" class=\"card-img-top\" id=\"cardTabla\">\n            <div>\n            <button onclick=\"playSound('").concat(animal.nombre, "')\" class=\"btn btn-secondary w-100\"> <img height=\"30\" src=\"assets/imgs/audio.svg\" /> </button>\n            </div>\n            ") + '</div>';
+    postHTML += '<div class="card m-3" style="width: 19rem;">' + "<img src=\"assets/imgs/".concat(animal.img, "\" class=\"card-img-top\" data-animal=\"").concat(animal.nombre, "\" data-toggle=\"modal\" data-target=\"#exampleModal\">\n            <div>\n            <button onclick=\"playSound('").concat(animal.nombre, "')\" class=\"btn btn-secondary w-100\"> <img height=\"30\" src=\"assets/imgs/audio.svg\" /> </button>\n            </div>\n            ") + '</div>';
   });
 
   // Mostrar las tarjetas en el contenedor
   container.innerHTML = postHTML;
+
+  // Agregar evento de clic a cada imagen
+  var images = document.querySelectorAll('#Animales img.card-img-top');
+  images.forEach(function (img) {
+    img.addEventListener('click', function (event) {
+      var animal = event.target.dataset.animal;
+      modal(animal);
+    });
+  });
 };
 
 // Función para mostrar un modal con la información del animal registrado
+// -----------------------------------------------------------------------
+// estoy conciente de que esta funcion no tiene el comportamiento correspondiente, ya que cuando se registra un segundo animal del mismo tipo que el primero,
+// y consultar este segundo haciendo click en la imagen, este muestra los datos del primer animal registrado de su tipo, en un caso real donde existe una base de datos
+// el animal registrado contaria con un id unico, por lo que al consultarl esta funcion se podria llamar a los datos correspondientes del id unico asignado al animal registrado.
+// puede que exista otra forma en la cual no se necesita un id unico asignado, pero escapa de mi conocimiento. tal vez recorriendo el arreglo de animales registrados pero no veo como eso podria funcionar si la funcion solo se guia por un clic.
 var modal = function modal(animal) {
-  var modalContent = "\n             <div class=\"modal-dialog modal-dialog-centered w-50 text-light\" role=\"document\">\n                <div class=\"modal-content bg-dark\" style=\"width: 350px\">\n                     <div class=\"modal-header\">\n                         <h5 class=\"modal-title\">".concat(animal.nombre, "</h5>\n                         <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                             <span aria-hidden=\"true\">&times;</span>\n                         </button>\n                     </div>\n                     <div class=\"modal-body\">\n                         <img src=\"assets/imgs/").concat(animal.img, "\" class=\"img-fluid\" alt=\"").concat(animal.nombre, "\" style=\"width: 340px\" />\n                        <p>Edad: ").concat(animal.edad, "</p>\n                         <p>Comentarios: ").concat(animal.comentarios, "</p>\n                         <div>\n                         <button onclick=\"playSound('").concat(animal.nombre, "')\" class=\"btn btn-secondary w-100\"> <img height=\"30\" src=\"assets/imgs/audio.svg\" /> </button>\n                         </div>\n                     </div>\n                 </div>\n             </div>\n         ");
+  var animalSeleccionado = animalesRegistrados.find(function (a) {
+    return a._nombre == animal;
+  });
+  var modalContent = "\n             <div class=\"modal-dialog modal-dialog-centered w-50 text-light\" role=\"document\">\n                <div class=\"modal-content bg-dark\" style=\"width: 350px\">\n                     <div class=\"modal-header\">\n                         <h5 class=\"modal-title\">".concat(animalSeleccionado.nombre, "</h5>\n                         <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">\n                             <span aria-hidden=\"true\">&times;</span>\n                         </button>\n                     </div>\n                     <div class=\"modal-body\">\n                         <img src=\"assets/imgs/").concat(animalSeleccionado.img, "\" class=\"img-fluid\" alt=\"").concat(animalSeleccionado.nombre, "\" style=\"width: 340px\" />\n                        <p>Edad: ").concat(animalSeleccionado.edad, "</p>\n                         <p>Comentarios: ").concat(animalSeleccionado.comentarios, "</p>\n                     </div>\n                 </div>\n             </div>\n         ");
   document.getElementById('exampleModal').innerHTML = modalContent;
   $('#exampleModal').modal('show');
 };
@@ -212,19 +224,30 @@ document.getElementById('animal').addEventListener('change', /*#__PURE__*/_async
 
 // Event listener para registrar nuevos animales cuando se hace clic en el botón "Registrar"
 document.getElementById("btnRegistrar").addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-  var animalesRegistrados;
+  var nombreAnimal, edadAnimal, comentariosAnimal, _animalesRegistrados;
   return regeneratorRuntime.wrap(function _callee4$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
-          _context4.next = 2;
-          return formAnimals();
-        case 2:
-          animalesRegistrados = _context4.sent;
-          if (animalesRegistrados) {
-            mostrarAnimalesRegistrados(animalesRegistrados);
+          nombreAnimal = document.getElementById('animal').value;
+          edadAnimal = document.getElementById('edad').value;
+          comentariosAnimal = document.getElementById('comentarios').value; // Condiciona que todos los campos sean seleccionados/completados
+          if (!(nombreAnimal == 'Seleccione un animal' || edadAnimal == 'Seleccione un rango de años' || comentariosAnimal == '')) {
+            _context4.next = 7;
+            break;
           }
-        case 4:
+          alert("debe completar todos los campos para registrar un animal");
+          _context4.next = 11;
+          break;
+        case 7:
+          _context4.next = 9;
+          return formAnimals();
+        case 9:
+          _animalesRegistrados = _context4.sent;
+          if (_animalesRegistrados) {
+            mostrarAnimalesRegistrados(_animalesRegistrados);
+          }
+        case 11:
         case "end":
           return _context4.stop();
       }
