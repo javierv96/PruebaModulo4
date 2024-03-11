@@ -4,9 +4,6 @@ import Animal from './Animal.js';
 // Obtiene el elemento de audio HTML con el ID "player"
 let sonidoPlayer = document.getElementById("player");
 
-// Imprime en la consola el elemento de audio obtenido
-console.log("sonido en la clase aguila:",sonidoPlayer);
-
 // Definición de la clase Lobo que extiende la clase Animal
 class Lobo extends Animal {
     // Constructor de la clase Lobo
